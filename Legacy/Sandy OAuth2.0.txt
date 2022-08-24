@@ -1,0 +1,32 @@
+Request a refresh_token as part of your access token payload by declaring the token access type as offline (token_access_type=offline) as a parameter in your authorization URL:
+
+https://www.dropbox.com/oauth2/authorize?client_id=a6isequl0r2ah8u&redirect_uri=https://www.google.com&response_type=code&token_access_type=offline
+Response: REDIRECT_URI/code=AUTHORIZATION_CODE
+
+
+Now, complete your authorization request to /oauth2/token
+
+curl https://api.dropbox.com/oauth2/token \
+    -d code=<AUTHORIZATION_CODE> \
+    -d grant_type=authorization_code \
+    -d redirect_uri=<REDIRECT_URI> \
+    -u <APP_KEY>:<APP_SECRET>
+
+{
+    "uid": "267161268", 
+    "access_token": "Your_Access_token", 
+    "expires_in": 14399, 
+    "token_type": "bearer", 
+    "scope": "files.content.read files.metadata.read sharing.read sharing.write", 
+    "refresh_token": "LwlUmqpmGqgAAAAAAAAEYgRoVJoei4u9cC7cDHFBAp0Kkp2JNciPxQpNWGY", 
+    "account_id": "dbid:AABuTtSGJM0ME3t4m85i1o3XqnmXvwH5I-A"
+}
+
+
+Now, when you request a new token from the /oauth2/token endpoint, set the grant_type to refresh_token and provide your refresh_token as a parameter:
+
+curl https://api.dropbox.com/oauth2/token \
+    -d grant_type=refresh_token \
+    -d refresh_token=<YOUR_REFRESH_TOKEN> \
+    -u <YOUR_APP_KEY>:<YOUR_APP_SECRET> 
+
